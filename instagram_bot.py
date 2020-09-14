@@ -5,8 +5,6 @@ import random
 
 bot = Bot()
 
-
-
 while True:
 	user = input("Ingrese su nombre de usuario: ")
 	psw = input("Ingrese su contraseña: ")
@@ -22,7 +20,7 @@ while True:
 	imgs = input("Ingrese nombre de carpeta donde tiene las imágenes: ")
 	path = os.getcwd()+"\\"+imgs
 	try:
-		carpetas = os.listdir(path)
+		imagenes = os.listdir(path)
 		break
 	except:
 		print("\n Carpeta no encontrada")
@@ -43,19 +41,25 @@ descripciones = [d1,d2,d3]
 
 formatos = [".jpg",".png",".jpeg"]
 
-for img in imgs: 
-	if img[-4:len(img)] in formatos:  #la imagen tiene el formato correcto
-		try:
-			bot.upload_photo(path+"\\"+img, caption=descripciones[random.randint(1,len(descripciones)-1)]) #se sube la foto con una descripcion al azar
-			os.remove(img+".REMOVE_ME")
-		except:
-			pass
-		if pregunta == 0:
-			t = random.randint(0,t_max*60)
-			print("Esperando {} minutos...".format(round(t/60,2)))
-			time.sleep(t)
+while imagenes != []:
+	for img in imagenes: 
+		if img[-4:len(img)] in formatos:  #la imagen tiene el formato correcto
+			try:
+				print("\n Subiendo imagenes...\n")
+				bot.upload_photo(path+"\\"+img, caption=descripciones[random.randint(1,len(descripciones)-1)]) #se sube la foto con una descripcion al azar
+				os.remove(path+"\\"+img+".REMOVE_ME")
+			except:
+				print("\n Formato no compatible \n")
+				pass
+			imagenes.remove(img)
+			if pregunta == 0:
+				t = random.randint(0,t_max*60)
+				print("\n Esperando {} minutos...\n".format(round(t/60,2)))
+				time.sleep(t)
+			else:
+				print("\n Esperando {} minutos...\n".format(minutos))
+				time.sleep(minutos*60)
 		else:
-			print("Esperando {} minutos...".format(minutos))
-			time.sleep(minutos*60)
-	else:
-		print("\n Error en formato de imagen \n")
+			print("\n Error en formato de imagen \n")
+
+print("\n Todas las imagenes han sido subidas \n")
